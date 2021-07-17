@@ -1,1 +1,28 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /auth
+
+spring:
+  application:
+    name: auth
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+  jmx:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth?allowPublicKeyRetrieval=true&useSSL=false&sslMode=DISABLED&serverTimezone=UTC
+    username: microservices
+    password: iDW*BQJBV%4&
+
+security:
+  jwt:
+    token:
+      secret-key: Z{sW8xjl7b}4{fyrEt+F(Zf+za5Q+mBLetiEI(p*KilB$Bs)wf;e4UPUu+mh
+      expire-length: 360000
 

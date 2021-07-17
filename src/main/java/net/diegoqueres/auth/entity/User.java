@@ -6,8 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -55,7 +57,11 @@ public class User implements UserDetails, Serializable {
     }
 
     public List<String> getRoles() {
-        return null;
+        final List<String> roles =
+                this.permissions.stream()
+                        .map(p -> p.getDescription())
+                        .collect(Collectors.toList());
+        return roles;
     }
 
     @Override
