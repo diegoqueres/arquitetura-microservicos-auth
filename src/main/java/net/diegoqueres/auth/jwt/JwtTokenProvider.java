@@ -1,8 +1,6 @@
 package net.diegoqueres.auth.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -21,17 +18,6 @@ import java.util.List;
 
 @Service
 public class JwtTokenProvider {
-
-
-
-
-    /*
-    security:
-  jwt:
-    token:
-      secret-key: Z{sW8xjl7b}4{fyrEt+F(Zf+za5Q+mBLetiEI(p*KilB$Bs)wf;e4UPUu+mh
-      expire-length: 360000
-     */
 
     @Value("${security.jwt.token.secret-key")
     private String secretKey;
@@ -74,6 +60,18 @@ public class JwtTokenProvider {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            if(claims.getBody().getExpiration().before(new Date())) {
+                return false;
+            }
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
 }
